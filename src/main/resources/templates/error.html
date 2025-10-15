@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Error</title>
+    <link rel="stylesheet" th:href="@{/css/error.css}">
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-content">
+            <div class="error-icon">⚠️</div>
+            <h1 class="error-title" th:text="${title}">Error</h1>
+            <p class="error-message" th:text="${message}">An error occurred</p>
+            <a th:href="@{/movies}" class="back-button">← Back to Movies</a>
+        </div>
+    </div>
+</body>
+</html>

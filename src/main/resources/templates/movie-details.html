@@ -47,7 +47,10 @@
             </div>
             
             <div class="reviews-section" th:if="${not #lists.isEmpty(allReviews)}">
-                <h3>Customer Reviews</h3>
+                <div class="reviews-header">
+                    <h3>Customer Reviews</h3>
+                    <button class="add-review-btn" onclick="openReviewModal()">Add Review</button>
+                </div>
                 <div class="review" th:each="review : ${allReviews}">
                     <div class="review-header">
                         <div class="review-avatar" th:text="${review.avatarEmoji}">👨</div>
@@ -61,5 +64,44 @@
             <a th:href="@{/movies}" class="back-button">← Back to Movies</a>
         </div>
     </div>
+    
+    <!-- Modal -->
+    <div id="reviewModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeReviewModal()">&times;</span>
+            <h3>Add Your Review</h3>
+            <div th:if="${error}" class="error-message" th:text="${error}">Error message</div>
+            <form method="POST" th:action="@{/movies/{id}/details(id=${movie.id})}" class="review-form" onsubmit="return validateForm()">
+                <div class="form-group">
+                    <label for="userName">Your Name:</label>
+                    <input type="text" id="userName" name="userName" th:value="${storedUserName}" required minlength="2" maxlength="50" placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label>Rating:</label>
+                    <div class="star-rating">
+                        <span class="star" data-rating="1">☆</span>
+                        <span class="star" data-rating="2">☆</span>
+                        <span class="star" data-rating="3">☆</span>
+                        <span class="star" data-rating="4">☆</span>
+                        <span class="star" data-rating="5">☆</span>
+                    </div>
+                    <input type="hidden" id="rating" name="rating">
+                </div>
+                <div class="form-group">
+                    <label for="comment">Your Review:</label>
+                    <textarea id="comment" name="comment" required maxlength="500" rows="4" placeholder="Share your thoughts about this movie (minimum 5 words)..."></textarea>
+                </div>
+                <button type="submit" class="submit-button">Submit Review</button>
+            </form>
+        </div>
+    </div>
+    
+    <script th:src="@{/js/modal.js}"></script>
+    <script th:if="${error}">
+        // Auto-open modal if there's an error
+        document.addEventListener('DOMContentLoaded', function() {
+            openReviewModal();
+        });
+    </script>
 </body>
 </html>

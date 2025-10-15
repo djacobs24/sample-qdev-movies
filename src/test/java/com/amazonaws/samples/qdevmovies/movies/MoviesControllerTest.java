@@ -71,14 +71,14 @@ public class MoviesControllerTest {
 
     @Test
     public void testGetMovieDetails() {
-        String result = moviesController.getMovieDetails(1L, model);
+        String result = moviesController.getMovieDetails(1L, model, null, null);
         assertNotNull(result);
         assertEquals("movie-details", result);
     }
 
     @Test
     public void testGetMovieDetailsNotFound() {
-        String result = moviesController.getMovieDetails(999L, model);
+        String result = moviesController.getMovieDetails(999L, model, null, null);
         assertNotNull(result);
         assertEquals("error", result);
     }
