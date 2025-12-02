@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} ?: 'Error - Pirate Movies'">Error - Pirate Movies</title>
+    <link rel="stylesheet" th:href="@{/css/movies.css}">
+    <style>
+        .error-container {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 600px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .error-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        .error-title {
+            font-size: 2em;
+            margin-bottom: 15px;
+            color: white;
+        }
+        
+        .error-message {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        
+        .btn-home {
+            background: white;
+            color: #dc3545;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-home:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .page-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="error-container">
+            <div class="error-icon">🏴‍☠️💥</div>
+            <h1 class="error-title" th:text="${title} ?: 'Shiver Me Timbers!'">Shiver Me Timbers!</h1>
+            <p class="error-message" th:text="${message} ?: 'Arrr! Something went wrong on our pirate ship, matey!'">
+                Arrr! Something went wrong on our pirate ship, matey!
+            </p>
+            <p class="error-message">
+                Don't worry, ye brave sailor! Even the best pirates encounter rough seas sometimes.
+            </p>
+            <a href="/movies" class="btn-home">⚓ Return to Treasure Chest</a>
+        </div>
+    </div>
+</body>
+</html>
