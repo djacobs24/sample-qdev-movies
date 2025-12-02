@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treasure Hunt Results - Pirate Movies</title>
+    <link rel="stylesheet" th:href="@{/css/movies.css}">
+    <style>
+        .search-header {
+            background: linear-gradient(135deg, #8B4513, #D2691E);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .search-summary {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .search-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #8B4513;
+        }
+        
+        .search-form h3 {
+            color: #8B4513;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #8B4513;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .search-buttons {
+            text-align: center;
+            margin-top: 15px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-search {
+            background: #8B4513;
+            color: white;
+        }
+        
+        .btn-search:hover {
+            background: #A0522D;
+        }
+        
+        .btn-clear {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-clear:hover {
+            background: #5a6268;
+        }
+        
+        .btn-back {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        .btn-back:hover {
+            background: #138496;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .no-results h3 {
+            color: #8B4513;
+            margin-bottom: 10px;
+        }
+        
+        .pirate-emoji {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="search-header">
+            <h1>🏴‍☠️ Treasure Hunt Results 🏴‍☠️</h1>
+            <div class="search-summary" th:text="${searchSummary}">Search summary</div>
+        </div>
+
+        <!-- Search Form -->
+        <div class="search-form">
+            <h3>⚓ Refine Yer Treasure Hunt ⚓</h3>
+            <form action="/movies/search" method="get">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">🎬 Movie Name (partial match):</label>
+                        <input type="text" id="name" name="name" th:value="${searchName}" 
+                               placeholder="Enter movie name, ye scallywag...">
+                    </div>
+                    <div class="form-group">
+                        <label for="id">🆔 Movie ID (exact match):</label>
+                        <input type="number" id="id" name="id" th:value="${searchId}" 
+                               placeholder="Enter movie ID, matey...">
+                    </div>
+                    <div class="form-group">
+                        <label for="genre">🎭 Genre:</label>
+                        <select id="genre" name="genre">
+                            <option value="">All genres, arrr!</option>
+                            <option th:each="g : ${genres}" 
+                                    th:value="${g}" 
+                                    th:text="${g}"
+                                    th:selected="${g == searchGenre}">Genre</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="search-buttons">
+                    <button type="submit" class="btn btn-search">🔍 Hunt for Treasure!</button>
+                    <a href="/movies/search" class="btn btn-clear">🧹 Clear Search</a>
+                    <a href="/movies" class="btn btn-back">⬅️ Back to All Movies</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Results Section -->
+        <div th:if="${movies != null and !movies.empty}">
+            <div class="movies-grid">
+                <div class="movie-card" th:each="movie : ${movies}">
+                    <div class="movie-icon" th:text="${movie.icon}">🎬</div>
+                    <h3 th:text="${movie.movieName}">Movie Title</h3>
+                    <div class="movie-details">
+                        <p class="director">Director: <span th:text="${movie.director}">Director Name</span></p>
+                        <p class="year">Year: <span th:text="${movie.year}">2023</span></p>
+                        <p class="genre">Genre: <span th:text="${movie.genre}">Drama</span></p>
+                        <p class="duration">Duration: <span th:text="${movie.duration}">120</span> minutes</p>
+                    </div>
+                    <div class="rating">
+                        <span class="stars">
+                            <span th:each="i : ${#numbers.sequence(1, 5)}" 
+                                  th:text="${i <= movie.imdbRating ? '★' : (i - 0.5 == movie.imdbRating ? '⭐' : '☆')}">★</span>
+                        </span>
+                        <span class="rating-score" th:text="${#numbers.formatDecimal(movie.imdbRating, 1, 1)} + '/5'">5.0/5</span>
+                    </div>
+                    <a th:href="@{/movies/{id}/details(id=${movie.id})}" class="details-btn">View Details</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- No Results Message -->
+        <div th:if="${movies == null or movies.empty}" class="no-results">
+            <div class="pirate-emoji">🏴‍☠️</div>
+            <h3>No Treasure Found!</h3>
+            <p th:text="${noResultsMessage}">No movies found matching your search criteria.</p>
+            <p>Try adjusting yer search criteria and hunt again, ye brave pirate!</p>
+        </div>
+    </div>
+</body>
+</html>
